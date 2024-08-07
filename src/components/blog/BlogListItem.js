@@ -1,11 +1,12 @@
 "use client";
-import { cn } from "@/utils/cn";
-import TextLimiter from "@/utils/text-limiter";
+
 import Image from "next/image";
 import { Suspense } from "react";
-import { UserImageLoading } from "./UserImageLoading";
+import { UserImageLoading } from "../ui/UserImageLoading";
+import { cn } from "@/utils/cn";
+import TextLimiter from "@/utils/text-limiter";
 
-export function Card({ title, author, img, desc, createdAt }) {
+export function BlogListItem({ title, author, img, desc, createdAt }) {
   const previewImage = img || "/img_default.svg";
   return (
     <div className="max-w-xs w-full group/card z-0">
