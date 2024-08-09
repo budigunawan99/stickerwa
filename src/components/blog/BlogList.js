@@ -5,6 +5,7 @@ import { BlogListItem } from "./BlogListItem";
 import { articles } from "@/lib/data";
 import { useInView } from "react-intersection-observer";
 import { SkeletonLoadingRow } from "../ui/SkeletonLoadingRow";
+import Link from "next/link";
 
 const initialArticles = articles.slice(0, 3);
 
@@ -34,16 +35,15 @@ const BlogList = () => {
   return (
     <>
       {displayArticles.map((article) => (
-        <BlogListItem key={article.id} {...article} />
+        <Link key={article.id} className="z-0" href={`/blog/${article.slug}`}>
+          <BlogListItem {...article} />
+        </Link>
       ))}
 
       <SkeletonLoadingRow
-        node={ref} 
-        toggle={
-          displayArticles.length === articles.length ? "hidden" : "block"
-        }
+        node={ref}
+        toggle={displayArticles.length === articles.length ? "hidden" : "block"}
       />
-
     </>
   );
 };

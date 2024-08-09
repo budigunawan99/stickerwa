@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Benefit = () => {
   return (
-    <div className="px-[8vw] lg:px-[5vw] pb-40">
+    <div className="px-[8vw] lg:px-[5vw] pb-28">
       <div className="w-full mt-12 lg:grid lg:place-items-center ">
         <div className="relative z-0 max-w-[89vw] md:max-w-2xl lg:max-w-[80rem] gap-[4rem] flex flex-col lg:flex-row items-center content-center">
           <Image

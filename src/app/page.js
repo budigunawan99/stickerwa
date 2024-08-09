@@ -1,3 +1,4 @@
+import GetStartedBanner from "@/components/banner/GetStartedBanner";
 import Benefit from "@/components/benefit/Benefit";
 import Hero from "@/components/hero/Hero";
 import Step from "@/components/step/Step";
@@ -12,6 +13,9 @@ const HomePage = () => {
         <Hero />
         <Step />
         <Benefit />
+        <div className="px-[8vw] lg:px-[5vw] pb-28">
+          <GetStartedBanner />
+        </div>
       </div>
     </main>
   );
