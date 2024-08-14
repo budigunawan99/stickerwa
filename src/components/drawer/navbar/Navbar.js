@@ -35,6 +35,7 @@ const Navbar = () => {
               alt="StickerWA Logo"
               width="200"
               height="40"
+              priority
             />
           </Link>
         </div>

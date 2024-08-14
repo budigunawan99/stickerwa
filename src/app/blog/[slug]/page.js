@@ -1,14 +1,26 @@
 import GetStartedBanner from "@/components/banner/GetStartedBanner";
 import { UserImageLoading } from "@/components/ui/UserImageLoading";
-import { articles } from "@/lib/data";
+import { getArticleBySlug } from "@/lib/wordpress";
+import DateFormatter from "@/utils/date-formatter";
 import Image from "next/image";
 import { Suspense } from "react";
 
-const ContentBlogPage = ({ params }) => {
+export const generateMetadata = async ({ params }) => {
   const { slug } = params;
 
-  const article = articles.find((article) => article.slug === slug);
-  const previewImage = article.img || "/img_default.svg";
+  const article = await getArticleBySlug({ slug: slug });
+
+  return {
+    title: article.title,
+  };
+};
+
+const ContentBlogPage = async ({ params }) => {
+  const { slug } = params;
+
+  const article = await getArticleBySlug({ slug: slug });
+
+  const previewImage = article.featured_image || "/img_default.svg";
 
   return (
     <div className="md:px-[5vw] lg:px-[10vw] xl:px-[15vw]">
@@ -26,9 +38,9 @@ const ContentBlogPage = ({ params }) => {
 
         <div className="flex flex-col">
           <p className="font-normal text-base text-gray-50 relative">
-            {article.author}
+            {article.author.name}
           </p>
-          <p className="text-sm text-gray-400">{article.createdAt}</p>
+          <p className="text-sm text-gray-400">{DateFormatter(article.date)}</p>
         </div>
       </div>
 
@@ -48,7 +60,12 @@ const ContentBlogPage = ({ params }) => {
       </div>
 
       <div className="mb-24">
-        <p className="text-lg">{article.desc}</p>
+        <div
+          className="text-lg"
+          dangerouslySetInnerHTML={{
+            __html: article.content,
+          }}
+        ></div>
       </div>
 
       <div className="w-full">

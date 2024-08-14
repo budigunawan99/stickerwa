@@ -5,9 +5,10 @@ import { Suspense } from "react";
 import { UserImageLoading } from "../ui/UserImageLoading";
 import { cn } from "@/utils/cn";
 import TextLimiter from "@/utils/text-limiter";
+import DateFormatter from "@/utils/date-formatter";
 
-export function BlogListItem({ title, author, img, desc, createdAt }) {
-  const previewImage = img || "/img_default.svg";
+export function BlogListItem({ article }) {
+  const previewImage = article.featured_image || "/img_default.svg";
   return (
     <div className="max-w-xs w-full group/card z-0">
       <div
@@ -31,18 +32,21 @@ export function BlogListItem({ title, author, img, desc, createdAt }) {
 
           <div className="flex flex-col">
             <p className="font-normal text-base text-gray-50 relative z-10">
-              {TextLimiter(author, 15)}
+              {TextLimiter(article.author.name, 15)}
             </p>
-            <p className="text-sm text-gray-400">{createdAt}</p>
+            <p className="text-sm text-gray-400">{DateFormatter(article.date)}</p>
           </div>
         </div>
         <div className="text content pl-4">
           <h1 className="font-bold text-xl md:text-2xl text-gray-50 relative z-10">
-            {title}
+            {article.title}
           </h1>
-          <p className="font-normal text-sm text-gray-50 relative z-10 my-4">
-            {TextLimiter(desc, 100)}
-          </p>
+          <div
+            className="font-normal text-sm text-gray-50 relative z-10 my-4"
+            dangerouslySetInnerHTML={{
+              __html: TextLimiter(article.excerpt, 100),
+            }}
+          ></div>
         </div>
       </div>
     </div>

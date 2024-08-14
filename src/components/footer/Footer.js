@@ -12,6 +12,7 @@ const Footer = () => {
               alt="StickerWA Logo"
               width="250"
               height="50"
+              priority
             />
           </Link>
           <div className="text-md">
