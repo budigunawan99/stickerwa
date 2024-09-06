@@ -1,14 +1,60 @@
+"use client";
+
 import LabelInputContainer from "@/components/ui/LabelInputContainer";
 import BottomGradient from "@/components/ui/BottomGradient";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import FormAlert from "@/components/ui/FormAlert";
+import SubmitButton from "../submit-button";
+import { login } from "@/lib/actions/user.actions";
 
 const LoginPage = () => {
+  const [state, setState] = useState({ success: "", error: "" });
+
+  const closeAlert = () => {
+    setState((prevState) => ({ ...prevState, error: "" }));
+  };
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!searchParams.has("msg")) {
+      return;
+    }
+    const msg = searchParams.get("msg");
+    setState({ error: msg || "" });
+
+    const search = new URLSearchParams(searchParams);
+    search.delete("msg");
+    router.replace("/login", undefined, { shallow: true });
+  }, [searchParams, router]);
+
   return (
     <>
       <h1 className="text-center text-[2.5rem] font-bold mb-10">Login</h1>
+      {state?.success !== "" && (
+        <div className="max-w-md w-full mx-auto mb-5">
+          <FormAlert
+            message={state?.success}
+            action={closeAlert}
+            className="alert-success"
+          />
+        </div>
+      )}
+      {state?.error !== "" && (
+        <div className="max-w-md w-full mx-auto mb-5">
+          <FormAlert
+            message={state?.error}
+            action={closeAlert}
+            className="alert-error"
+          />
+        </div>
+      )}
       <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input dark:bg-black border-[1px] border-solid border-neutral-300">
         <h2 className="font-bold text-xl dark:text-neutral-200">
           Welcome to StickerWA
@@ -37,13 +83,15 @@ const LoginPage = () => {
             />
           </LabelInputContainer>
 
-          <button
+          <SubmitButton
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-            type="submit"
+            pendingText="Loading..."
+            formAction={login}
+            preventSubmit={false}
           >
             Login &rarr;
             <BottomGradient />
-          </button>
+          </SubmitButton>
 
           <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
 

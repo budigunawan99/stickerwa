@@ -36,9 +36,41 @@ const RegisterPage = () => {
     password_confirmation: "",
   });
 
+  const [preventSubmit, setPreventSubmit] = useState(false);
+
   const [state, setState] = useState({ error: "" });
 
   const checkValueError = (name, value) => {
+    if (name === "password") {
+      if (value.length < 6) {
+        setErrorInputClass((prevState) => {
+          return {
+            ...prevState,
+            password:
+              "outline-none ring-[2px] ring-red-500/50 dark:focus-visible:ring-red-500",
+          };
+        });
+        setErrorInputMessage((prevState) => {
+          return {
+            ...prevState,
+            password: "Password minimum length is 6 characters",
+          };
+        });
+      } else {
+        setErrorInputClass((prevState) => {
+          return {
+            ...prevState,
+            password: "",
+          };
+        });
+        setErrorInputMessage((prevState) => {
+          return {
+            ...prevState,
+            password: "",
+          };
+        });
+      }
+    }
     if (name === "password_confirmation") {
       if (credential.password !== value) {
         setErrorInputClass((prevState) => {
@@ -70,15 +102,17 @@ const RegisterPage = () => {
         });
       }
     }
-    return value;
   };
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
+
+    checkValueError(name, value);
+
     setCredential((previousInputs) => ({
       ...previousInputs,
-      [name]: checkValueError(name, value),
+      [name]: value,
     }));
   };
 
@@ -88,6 +122,18 @@ const RegisterPage = () => {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  useEffect(() => {
+    const isError = Object.entries(errorInputMessage).filter(
+      ([key, value]) => value !== ""
+    );
+    if (isError.length > 0) {
+      console.log(isError);
+      setPreventSubmit(true);
+    } else {
+      setPreventSubmit(false);
+    }
+  }, [errorInputMessage]);
 
   useEffect(() => {
     if (!searchParams.has("msg")) {
@@ -106,7 +152,11 @@ const RegisterPage = () => {
       <h1 className="text-center text-[2.5rem] font-bold mb-10">Sign up</h1>
       {state?.error !== "" && (
         <div className="max-w-md w-full mx-auto mb-5">
-          <FormAlert message={state?.error} action={closeAlert} />
+          <FormAlert
+            message={state?.error}
+            action={closeAlert}
+            className="alert-error"
+          />
         </div>
       )}
       <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input dark:bg-black border-[1px] border-solid border-neutral-300">
@@ -151,8 +201,10 @@ const RegisterPage = () => {
               type="password"
               value={credential.password}
               onChange={handleChange}
+              className={errorInputClass.password}
               required
             />
+            <p className="text-red-500 text-sm">{errorInputMessage.password}</p>
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password_confirmation">Password Confirmation</Label>
@@ -172,7 +224,8 @@ const RegisterPage = () => {
           </LabelInputContainer>
           <SubmitButton
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-           pendingText="Loading..."
+            pendingText="Loading..."
+            preventSubmit={preventSubmit}
             formAction={register}
           >
             Sign up &rarr;

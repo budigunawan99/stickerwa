@@ -2,7 +2,7 @@
 import React from "react";
 import { useFormStatus } from "react-dom";
 
-const SubmitButton = ({ children, pendingText, ...props }) => {
+const SubmitButton = ({ children, pendingText, preventSubmit, ...props }) => {
   const { pending, action } = useFormStatus();
 
   const isPending = pending && action === props.formAction;
@@ -12,7 +12,7 @@ const SubmitButton = ({ children, pendingText, ...props }) => {
       {...props}
       type="submit"
       aria-disabled={pending}
-      disabled={isPending ? true : false}
+      disabled={preventSubmit ? true : isPending ? true : false}
     >
       {isPending ? pendingText : children}
     </button>
