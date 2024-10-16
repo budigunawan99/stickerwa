@@ -3,7 +3,7 @@ import React from "react";
 
 const FormAlert = ({ className, message, action }) => {
   return (
-    <div role="alert" className={cn("alert gap-2", className)}>
+    <div role="alert" className={cn("alert gap-2 grid-flow-col text-start justify-items-start", className)}>
       <button className="btn btn-ghost p-2" onClick={action}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
