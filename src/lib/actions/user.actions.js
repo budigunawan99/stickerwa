@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/supabase-server-side";
 import { revalidatePath } from "next/cache";
-import { schema } from "@/app/(auth)/schema";
+import { schema } from "@/app/(home)/(auth)/schema";
 
 export const login = async (formData) => {
   const supabase = createClient()
